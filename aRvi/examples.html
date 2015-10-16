@@ -1,0 +1,546 @@
+<!doctype html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang=""> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8" lang=""> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9" lang=""> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang=""> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>aRvi Examples</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="stylesheet" href="./../css/bootstrap.min.css">
+        <style>
+            body {
+                padding-top: 80px;
+                padding-bottom: 20px;
+            }
+            
+            li.L0, li.L1, li.L2, li.L3,
+            li.L5, li.L6, li.L7, li.L8
+            { list-style-type: decimal !important }
+        </style>
+        <link rel="stylesheet" href="./../css/bootstrap-theme.min.css">
+        <link rel="stylesheet" href="./../css/main.css">
+
+        <script src="./../js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
+    </head>
+    <body>
+        
+        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="/">aRvi</a>
+                </div>
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                      <li><a href="/">Docs</a></li>
+                      <li class="active"><a href="./examples.html">Examples</a></li>
+                      <li><a href="#">Download</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <div class="container">
+
+            <div class="row">
+
+                <div class="col-md-9" data-spy="affix" data-offset-top="100" data-offset-bottom="200">
+
+                    <!--[if lt IE 8]>
+                        <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+                    <![endif]-->
+                    
+                    <h1>aRvi Examples</h1>
+                    
+                    <p>These examples demonstrate the simplicity of aRvi and will help you using it in the proper way.</p>
+
+                    <h2 id="controller">Controller</h2>
+                    
+                    <h3>Simple Controller</h3>
+                    
+                    <pre class="prettyprint lang-php linenums">
+class SettingsController extends \aRvi\Controller {
+    
+    protected function generate() {
+
+        // Do your stuff here ...
+        // Interoperate with your view
+        // $this-&gt;view-&gt; ....
+        // That's it
+
+        return parent::generate();
+    }
+
+}
+</pre>
+                    
+                    <h3>Redirection</h3>
+                    
+                    <pre class="prettyprint lang-php linenums">
+class SettingsController extends \aRvi\Controller {
+    
+    protected function generate() {
+
+        return new \aRvi\WebResponse\RedirectionWebResponse("http://www.example.com/", 301);
+    }
+
+}
+</pre>
+                    <h3>Redirection with UriFetcher</h3>
+                    
+                    <pre class="prettyprint lang-php linenums">
+class SettingsController extends \aRvi\Controller {
+    
+    protected function generate() {
+
+        return new \aRvi\WebResponse\RedirectionWebResponse($this-&gt;uriFetcher-&gt;fetch("home"), 302);
+    }
+
+}
+</pre>
+                    <h3>JSON Response without View</h3>
+                    
+                    <pre class="prettyprint lang-php linenums">
+class SettingsSaveProcessController extends \aRvi\Controller {
+    
+    protected function generate() {
+
+        $response = $this-&gt;createResponseByViewType();
+
+        $response->setPayload(array(
+            "success" =&gt; true,
+            "message" =&gt; "Successfully saved!",
+        ));
+        
+        return $response; 
+    }
+
+}
+</pre>
+                    
+                    <h2 id="view">View</h2>
+                    
+                    <h3>Simple View</h3>
+                    
+                    <pre class="prettyprint lang-php linenums">
+class SettingsHtmlView extends \aRvi\View\View {
+
+    protected function render() {       
+ 
+        $content = "<html>";
+        $content .= "<body>";
+        $content .= "Hello World!";
+        $content .= "</body>";
+        $content .= "</html>";
+
+        return $content;
+    }
+
+}
+</pre>
+                    
+                     <h2 id="passing-data">Passing data from Controller to View</h2>
+                     
+                     <pre class="prettyprint lang-php linenums">
+class SettingsController extends \aRvi\Controller {
+    
+    protected function generate() {
+
+        $this-&gt;view-&gt;payload-&gt;firstName = "Ronald";
+        $this-&gt;view-&gt;payload-&gt;fruits = array(
+            "apple",
+            "cherry",
+            "orange"
+        );
+
+        return parent::generate();
+    }
+
+}
+
+class SettingsHtmlView extends \aRvi\View\View {
+
+    protected function render() {       
+ 
+        $content = "Hello " . $this-&gt;payload-&gt;firstName . "&lt;br /&gt;";
+
+        foreach ($this-&gt;payload-&gt;fruits as $strFruit) {
+            $content .= $strFruit . "&lt;br /&gt;";
+        }
+
+        return $content;
+    }
+
+}
+</pre>
+                     
+                    <h2 id="uri-fetcher">UriFetcher</h2>
+                    
+                    <div class="alert alert-info" role="alert">
+                        <b>Please note!</b>
+                        This example works for controllers <b>and</b> views the same way. The UriFetcher instance is accessible 
+                        for both.
+                    </div>
+                     
+                    <pre class="prettyprint lang-php linenums">
+class SettingsHtmlView extends \aRvi\View\View {
+
+    protected function render() {       
+ 
+        $uri = $this-&gt;uriFetcher-&gt;fetch("home");
+        $label = $this-&gt;uriFetcher-&gt;fetchURILabelByPageId("home");
+
+        $content = "&lt;a href=\"{$uri}\"&gt;{$label}&lt;/a&gt;";
+
+        return $content;
+    }
+
+}
+</pre>
+                    <h3>Adding GET-Parameters</h3>
+                     
+                    <pre class="prettyprint lang-php linenums">
+class SettingsHtmlView extends \aRvi\View\View {
+
+    protected function render() {       
+ 
+        $uri = $this-&gt;uriFetcher-&gt;fetch("home");
+        $label = $this-&gt;uriFetcher-&gt;fetchURILabelByPageId("home?param1=this&amp;param2=that#jump"); // /home/?param1=this&amp;param2=that#jump
+
+        $content = "&lt;a href=\"{$uri}\"&gt;{$label}&lt;/a&gt;";
+
+        return $content;
+    }
+
+}
+</pre>
+                    <h3>Variables in Page Registry</h3>
+                     
+                    <pre class="prettyprint lang-php linenums">
+class SettingsHtmlView extends \aRvi\View\View {
+
+    protected function render() {       
+ 
+        $uri = $this-&gt;uriFetcher-&gt;fetch("home");
+        // Page Registry: &lt;uri&gt;/home/%param1%/&lt;/uri&gt;
+        $label = $this-&gt;uriFetcher-&gt;fetchURILabelByPageId("home", array("param1" => "this")); // /home/this/
+
+        $content = "&lt;a href=\"{$uri}\"&gt;{$label}&lt;/a&gt;";
+
+        return $content;
+    }
+
+}
+</pre>
+                    
+                    <h2 id="client">Client</h2>
+                     
+                    <h3>Accessing client data</h3>
+                    
+                    <div class="alert alert-info" role="alert">
+                        <b>Please note!</b>
+                        This example works for controllers <b>and</b> views the same way. The client instance is accessible 
+                        for both.
+                    </div>
+                     
+                    <pre class="prettyprint lang-php linenums">
+class SettingsHtmlView extends \aRvi\View\View {
+
+    protected function render() {       
+ 
+        $content = "IP-address " . $this-&gt;client-&gt;strIpAddress . "&lt;br /&gt;";
+        $content .= "Real IP-address " . $this-&gt;client-&gt;strRealIpAddress . "&lt;br /&gt;";
+
+        return $content;
+    }
+
+}
+</pre>
+                    <h3>Extending client</h3>
+                     
+                    <pre class="prettyprint lang-php linenums">
+namespace App\Client;
+
+class MyClient extends \aRvi\Client\Client {
+
+    public $intUserId = null;
+    
+    /**
+     * Constructor
+     * 
+     * @param array $arrClient Client data
+     */
+    public function __construct($arrClient) {
+        
+        parent::__construct($arrClient);
+        
+        $this-&gt;intUserId  = $this-&gt;getValueOrNull($arrClient, "user_id");
+        
+    }
+    
+    /**
+     * Returns whether a user is logged in or not
+     * 
+     * @return boolean Status
+     */
+    public function isLoggedIn() {
+        return isset($this-&gt;intUserId);
+    }
+    
+}
+</pre>
+                     
+                    <h3>Checking login state</h3>
+                    
+                    <div class="alert alert-info" role="alert">
+                        <b>Please note!</b>
+                        Since aRvi has no clue about your user management, calling <i>isLoggedIn()</i> will always 
+                        return <i>true</i> and therefore makes no sense. You need to create an own client class by 
+                        extending aRvis client.
+                    </div>
+                     
+                    <pre class="prettyprint lang-php linenums">
+class SettingsHtmlView extends \aRvi\View\View {
+
+    protected function render() {       
+ 
+        if (true === $this-&gt;client-&gt;isLoggedIn()) {
+            $content = "Logged in";
+        } else {
+            $content = "Not logged in";
+        }
+
+        return $content;
+    }
+
+}
+</pre>
+                    
+                    <h2 id="request">Request</h2>
+                     
+                    <h3>Accessing request data</h3>
+                    
+                    <div class="alert alert-info" role="alert">
+                        <b>Please note!</b>
+                        According to the documentation aRvi makes no difference between GET, POST or any other type of request. 
+                        The <i>request</i> instance will always only provide you the data according to the type of request.
+                    </div>
+                     
+                    <pre class="prettyprint lang-php linenums">
+class SettingsController extends \aRvi\Controller {
+    
+    protected function generate() {
+
+        // /settings?param1=17&amp;param2=05
+        echo $this-&gt;request-&gt;param1 . " - " . $this-&gt;request-&gt;param2;
+
+        return parent::generate();
+    }
+
+}
+</pre>
+                     
+                    
+                    <h2 id="page-registry">Page Registry</h2>
+                    
+                    <pre class="prettyprint lang-xml linenums">
+&lt;entry&gt;
+    &lt;id&gt;settings&lt;/id&gt;
+
+    &lt;title&gt;&lt;![CDATA[User settings form]]&gt;&lt;/title&gt;
+    &lt;uri&gt;/settings&lt;/uri&gt;
+
+    &lt;methods&gt;GET&lt;/methods&gt;
+
+    &lt;namespace&gt;settings&lt;/namespace&gt;
+    &lt;view&gt;settings_form&lt;/view&gt;
+
+    &lt;login&gt;force_login&lt;/login&gt;
+    &lt;https&gt;force_on&lt;/https&gt;        
+&lt;/entry&gt;
+</pre>
+                    
+                    <h3>Single Page Registry - Full length example</h3>
+                    
+<pre class="prettyprint lang-xml linenums">
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;registry&gt;
+
+    &lt;entry&gt;
+        &lt;id&gt;_default_&lt;/id&gt;
+        
+        &lt;type&gt;html&lt;/type&gt;
+        
+        &lt;login&gt;&lt;/login&gt;
+        &lt;https&gt;&lt;/https&gt;
+        
+        &lt;redirections&gt;
+            &lt;login&gt;
+                &lt;force_login&gt;/login/?url=%request_uri_url_encoded%&lt;/force_login&gt;
+                &lt;deny_login&gt;/my-home/&lt;/deny_login&gt;
+            &lt;/login&gt;
+            &lt;ajax_login&gt;
+                &lt;force_login&gt;/ajax/login/?url=%request_uri_url_encoded%&lt;/force_login&gt;
+                &lt;deny_login&gt;&lt;/deny_login&gt;
+            &lt;/ajax_login&gt;
+            &lt;https&gt;
+                &lt;force_on&gt;https://%http_host%%request_uri%&lt;/force_on&gt;
+                &lt;force_off&gt;http://%http_host%%request_uri%&lt;/force_off&gt;
+            &lt;/https&gt;
+        &lt;/redirections&gt;
+        
+        &lt;permissions&gt;&lt;/permissions&gt;
+    &lt;/entry&gt;
+
+    &lt;entry&gt;
+        &lt;id&gt;settings&lt;/id&gt;
+
+        &lt;title&gt;&lt;![CDATA[User settings form]]&gt;&lt;/title&gt;
+        &lt;uri&gt;/settings&lt;/uri&gt;
+
+        &lt;methods&gt;GET&lt;/methods&gt;
+
+        &lt;namespace&gt;settings&lt;/namespace&gt;
+        &lt;view&gt;settings_form&lt;/view&gt;
+
+        &lt;login&gt;force_login&lt;/login&gt;
+        &lt;https&gt;force_on&lt;/https&gt;        
+    &lt;/entry&gt;
+&lt;/registry&gt;
+</pre>
+                    
+                    <h2 id="landing-page">Landing Page</h2>
+
+                    <pre class="prettyprint lang-php linenums">
+require_once("./../bootstrap.php");
+
+try {
+    $provider = new \aRvi\PageRegistry\Provider\PageRegistryXmlProvider("./../data/page_registry.xml");
+
+    $registry = new \aRvi\PageRegistry\Provider\MultiProviderPageRegistry();
+    $registry-&gt;addProvider($provider);
+} catch (Exception $e)  {
+}
+
+try {
+
+    $webRequestHandler = new \aRvi\WebRequest\Handler\WebRequestHandler();
+    
+    $webRequestHandler-&gt;pageRegistry = $registry;
+        
+    $webRequestHandler-&gt;dispatcher = new \aRvi\Dispatcher\Dispatcher();
+    $webRequestHandler-&gt;client = \App\Client\ClientFactory::getClient();
+    $webRequestHandler-&gt;request = \aRvi\ClientRequest\ClientRequestFactory::getWebRequest();
+    $webRequestHandler-&gt;cookie = \aRvi\ClientRequest\ClientRequestFactory::getCookieRequest();
+    
+    $webRequestHandler-&gt;fltRenderTimeStart = microtime();
+    $webRequestHandler-&gt;strHostName = gethostname();
+    
+    if (false === isset($webRequestHandler-&gt;request-&gt;_page) && true === isset($_GET['_page'])) {
+        $webRequestHandler-&gt;request-&gt;_page = $_GET['_page'];
+    }
+    if (false === isset($webRequestHandler-&gt;request-&gt;_type) && true === isset($_GET['_type'])) {
+        $webRequestHandler-&gt;request-&gt;_type = $_GET['_type'];
+    }
+
+    $webRequestHandler-&gt;run();
+
+} catch (\aRvi\WebRequest\Handler\InvalidPageIdException $e) {
+    
+    header("Cache-Control: private");
+    header("HTTP/1.1 404 Not Found");
+    header("Location: /404/");
+    header("Connection: close");
+    exit;
+    
+} catch (\aRvi\Dispatcher\DispatcherFileNotFoundException $e) {
+    
+    header("Cache-Control: private");
+    header("HTTP/1.1 404 Not Found");
+    header("Location: /404/");
+    header("Connection: close");
+    exit;
+
+} catch (\aRvi\WebRequest\Handler\InvalidRequestMethodException $e) {
+    
+    header("Cache-Control: private");
+    header("HTTP/1.1 405 Method Not Allowed");
+    header("Allow: " . $e-&gt;strAllowedMethods);
+    header("Connection: close");
+        
+    echo "Method not allowed: " . $e-&gt;getMessage();
+    exit;
+    
+}
+</pre>
+
+                </div>
+
+                <div class="col-md-3">
+
+                    <nav class="nav affix">
+                        <ul class="nav">
+                            <li>
+                                <a href="#controller">Controller</a>
+                            </li>
+                            <li>
+                                <a href="#view">View</a>
+                            </li>
+                            <li>
+                                <a href="#passing-data">Passing data from Controller to View</a>
+                            </li>
+                            <li>
+                                <a href="#uri-fetcher">UriFetcher</a>
+                            </li>
+                            <li>
+                                <a href="#client">Client</a>
+                            </li>
+                            <li>
+                                <a href="#request">Request</a>
+                            </li>
+                            <li>
+                                <a href="#page-registry">Page Registry</a>
+                            </li>
+                            <li>
+                                <a href="#landing-page">Landing Page</a>
+                            </li>
+                            
+                        </ul>
+                    </nav>
+                    
+                    
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="container">
+        
+            <hr />
+
+            <footer>
+                <p>&copy; 2015 <a href="http://www.rvi-media.de/">Ronald Vilbrandt</a></p>
+            </footer>       
+
+        </div>
+
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.11.2.min.js"><\/script>')</script>
+
+        <script src="./../js/vendor/bootstrap.min.js"></script>
+
+        <script src="./../js/main.js"></script>
+        
+        <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+    </body>
+</html>

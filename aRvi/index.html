@@ -1,0 +1,966 @@
+<!doctype html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang=""> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8" lang=""> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9" lang=""> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang=""> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>aRvi Documentation - OOP MVC for PHP</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="stylesheet" href="./../css/bootstrap.min.css">
+        <style>
+            body {
+                padding-top: 80px;
+                padding-bottom: 20px;
+            }
+            
+            li.L0, li.L1, li.L2, li.L3,
+            li.L5, li.L6, li.L7, li.L8
+            { list-style-type: decimal !important }
+        </style>
+        <link rel="stylesheet" href="./../css/bootstrap-theme.min.css">
+        <link rel="stylesheet" href="./../css/main.css">
+
+        <script src="./../js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
+    </head>
+    <body>
+        
+        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="/">aRvi</a>
+                </div>
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                      <li class="active"><a href="/">Docs</a></li>
+                      <li><a href="./examples.html">Examples</a></li>
+                      <li><a href="#">Download</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <div class="container">
+
+            <div class="row">
+
+                <div class="col-md-9" data-spy="affix" data-offset-top="100" data-offset-bottom="200">
+
+                    <!--[if lt IE 8]>
+                        <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+                    <![endif]-->
+                    
+                    <h1>aRvi - High Standard OOP MVC Framework for PHP</h1>
+                    
+                    <p>
+                        aRvi is a small MVC framework for people with high standards with OOP and a passion for clean code. :) 
+                    </p>
+                    
+                    <h2 id="philosophy">
+                        Philosophy
+                    </h2>
+
+
+                    <p>aRvi's goal is to implement the MVC idea in a strict way combined
+                        with very good object-oriented programming patterns. The main idea
+                        behind aRvi is that a page has one resource address and a single job to
+                        do. Transfering Robert Martin's <a target="_blank" href="https://en.wikipedia.org/wiki/Single_responsibility_principle">Single Responsibility Principle</a> from OOP, one page may <span style="font-weight: bold;">not</span>result
+                        in two different responsibilites or actions in other words. In
+                        detail this means the common used technique of "creating a form and
+                        processing it after submitting" in a single "script" is not valid for
+                        aRvi. This may sound like much overhead but it's the way aRvi is meant
+                        to
+                        use. The spirit of aRvi is to seperate the programming into tidy OOP
+                        pieces.</p>
+
+
+                    <p>In aRvi's concept a single page consists of the following ingridients:</p>
+
+
+                    <ul>
+
+
+                        <li>One mandatory controller class</li>
+
+
+                        <li>One optional view class</li>
+
+
+                        <li>Optional model class(es)</li>
+
+
+                        <li>Optional Page Registry entry</li>
+
+
+                    </ul>
+
+
+                    <p>The dispatching process works automatically and the programmer of a
+                        new page has nothing to consider. His work starts by creating a
+                        controller and typically a view.</p>
+
+
+                    <h2 id="compatibility">Compatibility and interoperability</h2>
+
+
+                    <p>aRvi is fully namespaced and therefore will not going to get in each
+                        other's way with other frameworks or components. aRvi is not meant as a
+                        complete framework and so you will probably need to use other libraries
+                        or frameworks for database connections, sending emails, job processing,
+                        etc. aRvi is designed to work with all other components together as you
+                        should not be limited in designing and programming your controllers and
+                        views in any way. You can use your favorite template engine (e.g.
+                        smarty) as well as printing out raw PHP strings.</p>
+
+
+                    <p>aRvi can be used in existing projects as well as starting from the scratch with it.</p>
+
+
+                    <h2 id="audience">Audience</h2>
+
+
+                    <p>At first everyone&nbsp;interested in creating tidy and strict OOP
+                        should be satisfied by using aRvi. aRvi is not hard to learn and use but
+                        maybe hard to hold out.</p>
+
+
+                    <h2 id="limitations">Limitations</h2>
+
+
+                    <p>aRvi is not ready for the CLI out-of-the-box yet. Using it should be
+                        no problem as the programming of aRvi was always made while thinking
+                        about CLI usage but there is no CLI launcher ready at the moment.</p>
+                    aRvi has no router yet. Building well-formed URIs requires URL rewriting
+                    with&nbsp;webserver's configuration files (e.g. mod_rewrite on Apache)
+                    or accessing pages directly with "_page" param on the landing page
+                    script.<br>
+
+
+                    <h2 id="startup">Startup</h2>
+                    
+                    <p>To open a specific page you have to specify a given parameter <i>_page</i> via you request method (GET, POST, etc.)</p>
+                    
+                    <pre class="prettyprint">
+http://www.example.com/index.php?_page=settings
+</pre>
+                    
+                    <p>This will load and run the controller class <i>SettingsController</i>.
+                        <br /><b>Note:</b> Omitting the parameter <i>_page</i> will lead the dispatcher to load a default one called "home"</p>
+                    
+                    <pre class="prettyprint">
+http://www.example.com/index.php?_page=settings&amp;_ns=settings
+</pre>
+                    
+                    <p>This will load and run the controller class <i>SettingsController</i> in the directory folder <i>settings</i>.
+                        <br /><b>Note:</b> Setting the namespace can be done in Page Registry much cleaner and more comfortable.</p>
+                    
+                    <pre class="prettyprint">
+http://www.example.com/index.php?_page=settings&amp;_ns=settings&amp;_view=settings_form
+</pre>
+                    
+                    <p>This will load and run the controller class <i>SettingsController</i> in the directory folder <i>settings</i> and the view 
+                        <i>SettingsFormHtmlView</i> also in the directory folder <i>settings</i>.
+                        <br /><b>Note:</b> Setting the view can be done in Page Registry much cleaner and more comfortable. Omitting the parameter 
+                        <i>_view</i> will let the dispatcher use an instance of <i>\aRvi\View\View</i> instead.
+                    </p>
+                    
+                    <pre class="prettyprint">
+http://www.example.com/index.php?_page=settings&amp;_ns=settings&amp;_view=other_settings_form&_type=json
+</pre>
+                    
+                    <p>This will load and run the controller class <i>SettingsController</i> in the directory folder <i>settings</i> and the view 
+                        <i>SettingsForm<b>Json</b>View</i> also in the directory folder <i>settings</i>. 
+                        <br /><b>Note:</b> Setting the type can be done in Page Registry much cleaner and more comfortable.</p>
+                    
+                    <h3>Fallbacks</h3>
+                    
+                    <p>
+                        As you have read above, passing the parameters <i>_page</i> and <i>_type</i> via request method seems to be mandatory. In fact and due 
+                        to comfort reasons you can always pass them via GET. In case of a POST without <i>_page</i> or <i>_type</i> aRvi will try to extract 
+                        them from GET.
+                    </p>                    
+                    
+
+                    <h2 id="controller">Controller</h2>
+
+
+                    <p>The heart of each page is the controller. Within the controller the
+                        programmer will start his job when creating a new page. According to
+                        the MVC model the controller's job is to process the needed data, to
+                        operate with models and collecting the data which the view need to
+                        create its output.</p>
+
+
+                    <p>Simple controller example</p>
+
+                    <pre class="prettyprint lang-php linenums">
+class SettingsController extends \aRvi\Controller {
+    
+    protected function generate() {
+
+        // Do your stuff here ...
+        // Interoperate with your view
+        // $this-&gt;view-&gt; ....
+        // That's it
+
+        return parent::generate();
+    }
+
+}
+</pre>
+
+
+                    <h2 id="view">View</h2>
+
+
+                    <p>The view is an optional component of aRvi but is used high frequently
+                        as most pages have an output for the user (exceptions are HTTP
+                        redirections for example). Interpreted from the MVC model the view is a
+                        "stupid" component processing the data provided by the controller
+                        without doing&nbsp;business logic. aRvi's idea is that you can exchange
+                        (or use parallel) views of different types (HTML, JSON(P),
+                        HTML-Fragments, ...) with the same controller. It works in theory and
+                        also in practice depending on your programming.</p>
+
+
+                    <p>The view itself has no direct output if you want to follow aRvi's
+                        idea of a perfect OOP world. Surely you can use "echos" and "exits"
+                        within the view (who want's to stop you) but the intended way is to <span style="font-weight: bold;">return</span>
+                        your output back to the controller which will also return it back to
+                        the dispatcher as an response instance that will be processed and then
+                        printed to the client. This sounds hard to adapt but is as absolutely
+                        simple to use.</p>
+
+
+                    <h3>Bad style (but working) example&nbsp;</h3>
+
+                    <pre class="prettyprint lang-php linenums">
+class SettingsHtmlView extends \aRvi\View\View {
+
+    protected function render() {        
+        $content = "<html>";
+        $content .= "<body>";
+        $content .= "Hello World!";
+        $content .= "</body>";
+        $content .= "</html>";
+
+        echo $content;
+        exit;
+    }
+
+}
+</pre>
+
+                    <p>This example will work but is not recommended.</p>
+
+
+                    <h3>Recommended example</h3>
+
+<pre class="prettyprint lang-php linenums">
+class SettingsHtmlView extends \aRvi\View\View {
+   
+    protected function render() {        
+        $content = "<html>";
+        $content .= "<body>";
+        $content .= "Hello World!";
+        $content .= "</body>";
+        $content .= "</html>";
+
+        return $content;
+    }
+
+}
+</pre>
+
+                    <p>Not a big difference for you but for the process of the dispatching
+                        process which is not interrupted and will generate a full qualified web
+                        response with optional additional headers.</p>
+
+
+                    <h3>View Payload</h3>
+                    
+                    <p>To easily pass data from controller to view an object called "payload" is available with each view. Payload is an instance 
+                        of type <i>ViewPayload</i> which implements <i>Iterator</i> and <i>ArrayAccess</i> interfaces.</p>
+                    
+                    <pre class="prettyprint lang-php linenums">
+class SettingsController extends \aRvi\Controller {
+    
+    protected function generate() {
+
+        $this-&gt;view-&gt;payload-&gt;firstName = "Ronald";
+
+        return parent::generate();
+    }
+
+}
+
+class SettingsHtmlView extends \aRvi\View\View {
+
+    protected function render() {       
+ 
+        $content = "Hello " . $this-&gt;payload-&gt;firstName;
+
+        return $content;
+    }
+
+}
+</pre>
+                    
+                    <h2 id="responses">Responses</h2>
+
+
+                    <p>aRvi can return any response type that you like to. The default one
+                        is HTML, some others types are built-in for easy and automatic handling.</p>
+
+
+                    <h3>View type</h3>
+
+
+                    <p>aRvi can handle different built-in so called view types to output the
+                        view's data in the proper way (and again, that's the reason why it's
+                        important to <span style="font-weight: bold;">return</span> data
+                        instead of printing on your own). The passed view type will let the
+                        dispatcher load and initialize the corresponding view and the
+                        associated web respsonse.</p>
+
+
+                    <h4>Built-in&nbsp;View types</h4>
+
+
+                    <h5>HTML</h5>
+
+
+                    <p>The most used and default view type is the HTML one. The output of a
+                        HTML view will be printed out with a "Content-type: text/html" header.<br>
+
+
+                    </p>
+
+
+                    <h5>JSON</h5>
+
+
+                    <p>Returned content of a JSON view will be automatically encoded to JSON and send with a "Content-type: application/json" header.<br>
+
+
+                    </p>
+
+
+                    <h5>JSONP</h5>
+
+
+                    <p>Returned content of a JSONP view will be automatically encoded to
+                        JSON and wrapped in a JavaScript function name named "jsonpCallback".
+                        The name is customizable for sure. It will be send with a
+                        "Content-type: application/javascript" header.</p>
+
+
+                    <h4>Creating a custom view type</h4>
+
+                    <p>
+                    Creating a custom view type is not hard. The following example shows how you could
+                    easily create a PDF web response. The web response must be located in
+                    "App" namespace and autoloading must be able to find it. 
+                    </p>
+
+
+                    Web response
+
+
+<pre class="prettyprint lang-php linenums">
+namespace App\WebResponse;
+
+class PdfWebResponse extends \aRvi\WebResponse\WebResponse {
+
+    public function __construct() {
+        $this->arrHeaders[] = "Content-type: application/pdf";
+    }
+
+}
+</pre>
+
+
+                    <p></p>
+
+
+                    <h2 id="page-registry">Page Registry</h2>
+
+
+                    <p>See the Page Registry as the index of the whole website. Each single
+                        page is listed within this index and most of the meta data is stored in
+                        it too. The entry of a page stores data like the URI, the title and the
+                        meta description if wanted. Even if a secure connection over HTTPS is
+                        required or optional may be set in Page Registry. Also if a user has to be
+                        logged in to access the page. In many frameworks you have to set or
+                        access these&nbsp;information in the controller or view by hand. With
+                        defining them in the page registry you can set a page to a "login
+                        required" status without changing your programming at all. The Page
+                        Registry can be stored in a file, database or memory as long as you
+                        create a compatible provider.</p>
+
+
+                    <p>Page Registry example (XML style)</p>
+
+<pre class="prettyprint lang-xml linenums">
+&lt;entry&gt;
+    &lt;id&gt;settings&lt;/id&gt;
+
+    &lt;title&gt;&lt;![CDATA[User settings form]]&gt;&lt;/title&gt;
+    &lt;uri&gt;/settings&lt;/uri&gt;
+
+    &lt;methods&gt;GET&lt;/methods&gt;
+
+    &lt;login&gt;force_login&lt;/login&gt;
+    &lt;https&gt;force_on&lt;/https&gt;        
+&lt;/entry&gt;
+</pre>
+
+                    <p>This example shows a page with id "settings" that will have an HTML
+                        title-Tag "User settings form". The page shall be accessed by the URI
+                        "/settings" and only via GET. User login is required together with a
+                        secure connection over HTTPS. There are several other options to set.</p>
+
+
+                    <h3>Configuring a Page Registry entry</h3>
+
+
+                    Basically most of the following properties are optional. When creating
+                    a Page Registry it's highly recommended to create an entry "_default_"
+                    with all properties that shall be inherited to your page entries. All
+                    properties that are not explicitly set in your page entry will be
+                    inherited from the entry called "_default_". With this method you can
+                    easily require your whole website to use HTTPS with setting "https" to
+                    "force_on" in the default entry. After that you don't have to set a
+                    "https" property in each page entry because it will be inherited from
+                    the default one.
+                    <h4>id&nbsp;</h4>
+
+
+                    <p>The unique name of a page. You can access the page in your
+                        programming with this name. Tell the dispatcher to load the page with
+                        request paramete "_page". Example: http://example.org/?_page=settings</p>
+
+
+                    <h4>parent_id</h4>
+
+
+                    <p>The ID of the parent of this entry. Parent is relevant for logical connection but <span style="font-weight: bold;">not</span>
+                        for intheriting entry properties. Best examples are automatically
+                        created breadcrumbs or sitemaps which is simple with Page Registry.</p>
+
+
+                    <h4>title</h4>
+
+
+                    <p>HTML title tag can be generated with this property.</p>
+
+
+                    <h4>description</h4>
+
+
+                    <p>The meta description can be stored in this property.</p>
+
+
+                    <h4>label&nbsp;</h4>
+
+
+                    <p>The label is a short human readable (better customer readable) name
+                        for an entry. It can be used in breadcrumb or when linking to page.
+                        Label can be accessed in programming with UriFetcher which is a best
+                        way to create links in your programming. Using this option strictly you
+                        can easily change a page's label and all links within your website
+                        using UriFetcher will change the name too.</p>
+
+
+                    <h4>uri</h4>
+
+
+                    <p>The property "uri" will hold the URI to your page so it can be used
+                        by UriFetcher. Like the property "label" you can easily create links to
+                        your pages with the page's ID and not hardlinking them in your
+                        programming. Changing the property "uri" once in page registry will
+                        make all occurances using UriFetcher leading to the new URI.</p>
+
+
+                    <h4>methods</h4>
+
+
+                    <p>A list of &nbsp;allowed HTTP methods to access the page. Commonly
+                        you will use "GET" and "POST" as options or a combination like "GET
+                        POST" to allow more than one. Accessing a page with a method that is
+                        not listed will result in an exception.</p>
+
+
+                    <h4>login</h4>
+
+
+                    <p>Set if the page can be access when user is logged in only or when
+                        user is not logged in or if&nbsp;both states are possible. Valid
+                        options are "force_login", "deny_login" or leaving empty if both is
+                        valid. If &nbsp;login state is required for accessing the page, there
+                        will be an automatic redirection to your defined login page (see below).</p>
+
+
+                    <h4>https</h4>
+
+
+                    <p>Set if the page can be access with HTTP, HTTPS or both via
+                        connections. If the page is opened via a prohibited protocol, there
+                        will be an automatic redirection to the same page with the required
+                        protocol. This will be made according to a redirection setting (see
+                        below).<br>
+
+
+                    </p>
+
+
+                    <h4>redirections</h4>
+
+
+                    <p>Redirections will be used when the desired state of "https" or "login" is not fulfilled.</p>
+
+
+                    <h5>login</h5>
+
+
+                    <h6>force_login</h6>
+
+
+                    <p>In case of accessing a page with "login" property "force_login" as a
+                        user which is not logged in, he will be redirected to the URI specified
+                        in this property. The original URI can be passed as a GET parameter to
+                        redirect the user again after logging in to the original requested page.</p>
+
+
+                    <h6>deny_login</h6>
+
+
+                    <p>The opposite case of accessing a page that is only allowed for
+                        "guest users" will lead into a redirection to the URI set in this field.</p>
+
+
+                    <h5>https</h5>
+
+
+                    <h6>force_on</h6>
+
+
+                    <p>Accessing a page that needs HTTPS over a simple HTTP request will
+                        end in a redirection to the URI specified in this property. Usually
+                        this should be the same page with HTTPS protocol.</p>
+
+
+                    <h6>force_off</h6>
+
+
+                    <p>The opposite case of accessing a page that needs simple HTTP over a simple HTTPS request will end in
+                        a redirection to the URI specified in this property. Usually this
+                        should be the same page with HTTP protocol.</p>
+
+
+                    <h4>permissions</h4>
+
+
+                    <p>Defining permissions that are required to open the page. This may be
+                        a single permission like "admin" or a list like "moderator admin".</p>
+
+
+                    <p>type</p>
+
+
+                    <p>Set the view type of the page.</p>
+
+
+                    <h4>namespace</h4>
+
+
+                    <p>Set a namespace which will be used for loading controller and view. <b>Important:</b> This is not a PHP namespace. Namespace is 
+                    the name of the directory used in the file path when loading the controller/view.</p>
+                    
+
+
+                    <h4>controller<br>
+
+
+                    </h4>
+
+
+                    <p>Set the controller name to load like "settings". This will load the
+                        controller file "SettingsController.php". This property is optional -
+                        omitting will make the dispatcher load the controller with the same
+                        name as the ID.</p>
+
+
+                    <h4>view</h4>
+
+
+                    <p>Set the view name to load like "settings". This will load the view file "SettingsHtmlView.php".</p>
+
+
+                    <h3>Using multiple Page Registries together</h3>
+
+
+                    The Page Registry provider of aRvi is capable of loading multiple page
+                    registries at once and merging them intelligently to one entry. This is
+                    highly useful when dealing with multilingual websites. You can set up a
+                    global page registry and defining all the global settings like
+                    "method", "https", "login", etc. Then you create multiple Page
+                    Registries for each language. When starting aRvi's dispatching process
+                    you assign both Page Registries to the dispatcher. This will load the
+                    global entry and merge it with the language specific one. All
+                    properties that are not set in the language-specific Page Registry will
+                    be inherited from the global file (and also inherited from the default
+                    entry as well).
+                    <p>Example</p>
+
+
+                    <p>Exerpt of global Page Registry file "page_registry.xml"</p>
+
+<pre class="prettyprint lang-xml linenums">
+&lt;entry&gt;
+    &lt;id&gt;_default_&lt;/id&gt;
+    &lt;methods&gt;GET&lt;/methods&gt;
+    &lt;login&gt;&lt;/login&gt;                        
+    &lt;https&gt;force_off&lt;/https&gt;
+&lt;/entry&gt;
+
+&lt;entry&gt;
+    &lt;id&gt;settings&lt;/id&gt;
+    &lt;uri&gt;/settings&lt;/uri&gt;
+    &lt;login&gt;force_login&lt;/login&gt;
+    &lt;https&gt;force_on&lt;/https&gt;
+&lt;/entry&gt;
+</pre>
+
+                    Exerpt of &nbsp;language-specific Page Registry file "page_registry_de.xml"<br>
+
+<pre class="prettyprint lang-xml linenums">
+&lt;entry&gt;
+    &lt;id&gt;settings&lt;/id&gt;
+
+    &lt;title&gt;Einstellungen&lt;/title&gt;
+&lt;/entry&gt; 
+</pre>
+
+                    <p>Loading these with a Page Registry provider will end in the following (virtual) result:</p>
+
+                    
+<pre class="prettyprint lang-xml linenums">
+&lt;entry&gt;
+    &lt;id&gt;settings&lt;/id&gt;
+    &lt;uri&gt;/settings&lt;/uri&gt;
+
+    &lt;title&gt;Einstellungen&lt;/title&gt;
+
+    &lt;methods&gt;GET&lt;/methods&gt;
+
+    &lt;login&gt;force_login&lt;/login&gt;
+    &lt;https&gt;force_on&lt;/https&gt;     
+&lt;/entry&gt;
+</pre>
+                    
+                    
+                    <h3>Accessing the Page Registry within programming</h3>
+
+
+                    <p>Loading a the Page Registry is made in two steps. First creating a provider and then assign it to a Page Registry instance.</p>
+
+<pre class="prettyprint lang-php linenums">
+$provider = new \aRvi\PageRegistry\Provider\PageRegistryXmlProvider("./page_registry.xml");
+$registry = new \aRvi\PageRegistry\Provider\MultiProviderPageRegistry();
+$registry-&gt;addProvider($provider);
+</pre>
+
+
+                    <p>Accessing a page entry is easily made with</p>
+
+<pre class="prettyprint lang-php linenums">
+    $registry-&gt;getPageEntry("settings");
+</pre>
+
+
+                    When using aRvi it's comfortable to access the current entry because it's already loaded in your controller's dispatcher.
+                    
+<pre class="prettyprint lang-php linenums">
+class SettingsController extends \aRvi\Controller {
+
+    protected function generate() {
+
+        $this->dispatcher->pageRegistry->getPageEntry("settings");
+
+    }
+} 
+</pre>
+                    
+
+                    <h3>Using UriFetcher with Page Registry</h3>
+
+
+                    <p>UriFetcher is a tool to fetch the URI and label of a page entry.
+                        aRvi offers you an initilazied instance of UriFetcher for instant
+                        access.</p>
+
+<pre class="prettyprint lang-php linenums">
+class SettingsController extends \aRvi\Controller {
+
+    protected function generate() {
+
+        echo $this->uriFetcher->fetch("settings"); // will print "/settings"
+
+        echo $this->uriFetcher->fetchURILabelByPageId("settings"); // will print "User settings form"
+
+        return new \aRvi\WebResponse\RedirectionWebResponse($this->uriFetcher->fetch("settings")); // will result in a 301 HTTP redirection to "/settings"
+
+    }
+} 
+</pre>
+
+                    <p>This will work in a view as well</p>
+
+<pre class="prettyprint lang-php linenums">
+class SettingsHtmlView extends \aRvi\View\View {
+   
+    protected function render() {
+
+        echo $this->uriFetcher->fetch("settings"); // will print "/settings"
+        echo $this->uriFetcher->fetchURILabelByPageId("settings"); // will print "User settings form"
+
+    }
+
+}
+</pre>
+
+
+
+                    <h2 id="user-input">User input and filtering</h2>
+
+
+                    <h3>Basics</h3>
+
+
+                    <p>Foreword: aRvi has <span style="font-weight: bold;">not</span> the claim to offer
+                        complete and secure methods of filtering malicious user input. Never
+                        use unfiltered user input in your application. It's up to you to use
+                        PHP's built-in filter features and maybe filtering libraries in addition
+                        to secure your application against user attacks.</p>
+
+
+                    <p>aRvi is very straight (and strict) with request data. aRvi will
+                        provide you filtered user input to use in your programming. You should
+                        never use raw superglobals like $_GET or $_POST because the are not
+                        touched by any filtering of aRvi. When it comes to the strict point
+                        mentioned in the introduction sentence it's meant that aRvi will only
+                        provide the user input according to the request method. So if a page is
+                        requested via POST you will <span style="font-weight: bold;">not</span> have access to any GET parameters.</p>
+
+                    <p>Example POST request to <span style="font-style: italic;">/settings?option1=yes</span> with POST payload "<span style="font-style: italic;">option2: yes, option3: no</span>"</p>
+
+
+<pre class="prettyprint lang-php linenums">
+class SettingsController extends \aRvi\Controller {
+
+    protected function generate() {
+
+        echo $this->request->option1; // will print ""
+        echo $this->request->option2; // will print "yes"
+        echo $this->request->option3; // will print "no"
+
+    }
+
+}
+</pre>
+
+
+                    Using the provided&nbsp;ClientRequest instance $request over the direct
+                    access of $_GET or $_POST makes it easy to use or test your programming
+                    in a shell environment (e.g. PHPUnit) or changing request methods from
+                    GET to POST or vice versa.
+                    <h3>InputProcessors</h3>
+
+
+                    <p>aRvi comes along with some basic InputProcessors. aRvi will apply them
+                        automatically to each user input. So when using the&nbsp;ClientRequest
+                        instance you might receive data that may differ from the original
+                        input. aRvi will <span style="font-weight: bold;">not</span> modify the PHP's superglobals so you can take unmodified (but also unfiltered) data direclty from there.</p>
+
+
+                    <ul>
+
+
+                        <li>HTML - Filter out HTML tags</li>
+
+
+                        <li>JavaScript - Filter out common JavaScript expressions</li>
+
+
+                        <li>Trim - Trim white spaces</li>
+
+
+                        <li>Unicode MB4 - Removes MB4 unicode chars (emojis)</li>
+
+
+                    </ul>
+
+
+                    <h4>Creating your own InputProcessor</h4>
+
+
+                    <p>To use own filters it's easy to add own InputProcessors that will be applied to the request instance's data.</p>
+
+
+                    <h3>Extending ClientRequest for better filter techniques</h3>
+
+
+                    To combine the advantages of aRvi's ClientRequest instance with PHP's
+                    built-in filter techniques you can extend the ClientRequest class and add
+                    methods that use PHP's filter_input/filter_var and add much more
+                    security to your application. This feature will be included in further aRvi releases most likely.
+                    <p></p>
+
+
+                    <h2 id="client">Client</h2>
+
+
+                    <p>For accessing client data (more session data than browser
+                        information) aRvi is equipped with a Client class that can be accessed
+                        from controllers and views easily. Dealing with PHP's $_SESSION for
+                        user data is needless and not recommend (once again think about easier
+                        handling with unit tests ore shell environments in general).&nbsp;</p>
+
+
+                    <h3>Accessing client data in programming</h3>
+
+
+                    <p>Both controller and view have direct access to the Client instance.&nbsp;</p>
+
+<pre class="prettyprint lang-php linenums">
+class SettingsController extends \aRvi\Controller {        
+
+    protected function generate() {
+
+        echo $this->client->public_ip_address; // will print "192.168.0.1"
+        var_dump($this->client->isLoggedIn()); // will print "true"
+
+    }
+
+}
+</pre>                    
+
+                    <h3>Default settings</h3>
+
+
+                    <h4>public_ip_address</h4>
+
+
+                    <p>The IP address taken from $_SERVER's field "REMOTE_ADDR".</p>
+
+
+                    <h4>real_ip_address</h4>
+
+
+                    <p>The IP address taken from $_SERVER's field "HTTP_X_FORWARDED_FOR".
+                        HTTP_X_FORWARDED_FOR is commonly used by proxy servers and set to the
+                        original client's IP address. Even if the naming says it's the&nbsp;"real" one, keep in mind, that it's
+                        only a client's request header line that can be faked easily. </p>
+
+
+                    <h4>isLoggedIn()</h4>
+
+
+                    <p>Returning the login state (true/false) of the client. Must be
+                        overwritten for your own purposes. Used by dispatcher when checking
+                        Page Registry settings.</p>
+
+
+                    <h4>hasPermission($permissionName)</h4>
+
+
+                    Returns the permission state (true/false) of the client for a given
+                    permission. Must be overwritten for your own purposes. Used by
+                    dispatcher when checking Page Registry settings.
+                    <h3>Extending the class for your own desires</h3>
+
+
+                    To fulfill your own requirements of login state, permission checks or
+                    simple more user data like IDs, names, etc. you can extend the
+                    ClientRequest class and inject it into the dispatcher at startup.
+
+                </div>
+
+                <div class="col-md-3">
+
+                    <nav class="nav affix">
+                        <ul class="nav">
+                            <li>
+                                <a href="#philosophy">Philosophy</a>
+                            </li>
+                            <li>
+                                <a href="#compatibility">Compatibility and Interoperability</a>
+                            </li>
+                            <li>
+                                <a href="#audience">Audience</a>
+                            </li>
+                            <li>
+                                <a href="#limitations">Limitations</a>
+                            </li>
+                            <li>
+                                <a href="#startup">Startup</a>
+                            </li>
+                            <li>
+                                <a href="#controller">Controller</a>
+                            </li>
+                            <li>
+                                <a href="#view">View</a>
+                            </li>
+                            <li>
+                                <a href="#responses">Responses</a>
+                            </li>
+                            <li>
+                                <a href="#page-registry">Page Registry</a>
+                            </li>
+                            <li>
+                                <a href="#user-input">User Input and Filtering</a>
+                            </li>
+                            <li>
+                                <a href="#client">Client</a>
+                            </li>
+                            
+                        </ul>
+                    </nav>
+                    
+                    
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="container">
+        
+            <hr />
+
+            <footer>
+                <p>&copy; 2015 <a href="http://www.rvi-media.de/">Ronald Vilbrandt</a></p>
+            </footer>       
+
+        </div>
+
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.11.2.min.js"><\/script>')</script>
+
+        <script src="./../js/vendor/bootstrap.min.js"></script>
+
+        <script src="./../js/main.js"></script>
+        
+        <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+    </body>
+</html>
